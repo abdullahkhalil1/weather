@@ -6,7 +6,7 @@ import { WeatherDetails } from "../../components/weather/WeatherDetails";
 import { forecastModes } from "../../constants/forecastMode";
 import { Error } from "../../components/core/Error";
 import { handleApiErrors } from "../../utils/handleApiErrors";
-import { useCurrentWeather, useWeatherHistory, useLang } from "../../hooks";
+import { useCurrentWeather, useWeatherHistory, useLang, useMobileView } from "../../hooks";
 import { Loader } from "../../components/core/Loader";
 import Dropdown from "../../components/core/DropDown";
 import { useSearchLocation } from "../../apis/weather";
@@ -20,6 +20,7 @@ export const Weather = () => {
     const startDate = format(subDays(new Date(), 7), 'yyyy-MM-dd');
     const endDate = format(new Date(), 'yyyy-MM-dd');
     const isArabic = useLang()
+    const isMobile = useMobileView()
 
     const locationOptions = useLocations(searchValue);
     const { currentWeatherData, forecastWeatherData, isError, error, isLoading: isCurrentWeatherLoading } = useCurrentWeather(selectedLocation?.name || '');
@@ -34,7 +35,7 @@ export const Weather = () => {
             <div className="flex justify-end w-full mb-4">
                 <Dropdown 
                     isSearch
-                    width='w-1/4'
+                    width={isMobile ? 'w-full' : 'w-1/4'}
                     searchValue={searchValue}
                     setSearchValue={setSearchValue}
                     options={locationOptions}
