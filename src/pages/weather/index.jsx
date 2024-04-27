@@ -35,7 +35,8 @@ export const Weather = () => {
             <div className="flex justify-end w-full mb-4">
                 <Dropdown 
                     isSearch
-                    width={isMobile ? 'w-full' : 'w-1/4'}
+                    containerWidth={isMobile ? 'w-full' : 'w-1/4'}
+                    dropdownWidth='w-full'
                     searchValue={searchValue}
                     setSearchValue={setSearchValue}
                     options={locationOptions}

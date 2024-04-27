@@ -4,7 +4,7 @@ import { classNames } from '../../utils/classNames';
 import { useOnClickOutside, useLang } from '../../hooks';
 import { useTranslation } from 'react-i18next';
 
-const Dropdown = ({ options, selectedOption, setSelectedOption, searchValue, setSearchValue, isSearch, width }) => {
+const Dropdown = ({ options, selectedOption, setSelectedOption, searchValue, setSearchValue, isSearch, containerWidth, dropdownWidth }) => {
   const { t } = useTranslation('weather')
   const [isOpen, setIsOpen] = useState(false);
   const isArabic = useLang();
@@ -24,7 +24,7 @@ const Dropdown = ({ options, selectedOption, setSelectedOption, searchValue, set
   };
 
   return (
-    <div className={classNames("relative", width && width)}>
+    <div className={classNames("relative", containerWidth && containerWidth)}>
       {isSearch ?
         <>
           <input
@@ -49,7 +49,10 @@ const Dropdown = ({ options, selectedOption, setSelectedOption, searchValue, set
         </button>
       }
       {isOpen && options?.length > 0 && (
-        <div className={classNames("origin-top-right absolute mt-2 w-56 z-50 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5", isArabic ? 'left-0' : 'right-0')}>
+        <div className={classNames(
+          "origin-top-right absolute mt-2 z-50 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5",
+          isArabic ? 'left-0' : 'right-0', dropdownWidth ? dropdownWidth : 'w-56'
+        )}>
           <div ref={dropdownRef} className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
             {options?.map((option, index) => (
               <button
