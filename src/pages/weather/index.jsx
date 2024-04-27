@@ -1,25 +1,29 @@
-import { Suspense, useState } from "react";
+import { useState } from "react";
 import { format, subDays } from "date-fns";
 import { WeatherCard } from "../../components/weather/WeatherCard"
 import { ForecastCard } from "../../components/weather/ForecastCard";
 import { WeatherDetails } from "../../components/weather/WeatherDetails";
 import { forecastModes } from "../../constants/forecastMode";
 import { Error } from "../../components/core/Error";
-import { SearchInput } from "../../components/core/SearchInput";
 import { handleApiErrors } from "../../utils/handleApiErrors";
 import { useCurrentWeather, useWeatherHistory, useLang } from "../../hooks";
 import { Loader } from "../../components/core/Loader";
+import Dropdown from "../../components/core/DropDown";
+import { useSearchLocation } from "../../apis/weather";
+import { useLocations } from "../../hooks/useLocations";
 
 export const Weather = () => {
     const [forecastMode, setForecastMode] = useState(forecastModes.FUTURE)
-    const [query, setQuery] = useState('');
+    const [selectedLocation, setSelectedLocation] = useState()
+    const [searchValue, setSearchValue] = useState('')
     const isPreviousForecastMode = forecastModes.PREVIOUS === forecastMode;
     const startDate = format(subDays(new Date(), 7), 'yyyy-MM-dd');
     const endDate = format(new Date(), 'yyyy-MM-dd');
     const isArabic = useLang()
 
-    const { currentWeatherData, forecastWeatherData, isError, error, isLoading: isCurrentWeatherLoading } = useCurrentWeather(query);
-    const { weatherHistoryData, isLoading: isWeatherHistoryLoading } = useWeatherHistory({ startDate, endDate, isPreviousForecastMode, query })
+    const locationOptions = useLocations(searchValue);
+    const { currentWeatherData, forecastWeatherData, isError, error, isLoading: isCurrentWeatherLoading } = useCurrentWeather(selectedLocation?.name || '');
+    const { weatherHistoryData, isLoading: isWeatherHistoryLoading } = useWeatherHistory({ startDate, endDate, isPreviousForecastMode, query: selectedLocation?.name || '' })
     const { temp, icon, description, country, city, time, sunriseTime, sunsetTime, humidity, windSpeed, feelsLike, pressure } = currentWeatherData || {};
     const forecastDays = isPreviousForecastMode ? weatherHistoryData?.reverse() : forecastWeatherData;
 
@@ -28,7 +32,15 @@ export const Weather = () => {
     return (
         <>
             <div className="flex justify-end w-full mb-4">
-                <SearchInput setQuery={setQuery} />
+                <Dropdown 
+                    isSearch
+                    width='w-1/4'
+                    searchValue={searchValue}
+                    setSearchValue={setSearchValue}
+                    options={locationOptions}
+                    selectedOption={selectedLocation}
+                    setSelectedOption={setSelectedLocation}
+                />
             </div>
             {isError ? <Error errorMessage={handleApiErrors(error?.response.data.error.code)} /> :
                 <div className="flex flex-col md:flex-row gap-4" dir={isArabic && 'rtl'}>

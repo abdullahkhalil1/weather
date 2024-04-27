@@ -3,10 +3,8 @@ import { format } from 'date-fns';
 import { formatForecastWeatherData } from "../utils/formatForecastWeatherData";
 
 export const useCurrentWeather = (searchValue) => {
-    const { data: weatherData, isError, isLoading, error} = useGetWeather(searchValue)
+    const { data: weatherData, isError, isLoading, error } = useGetWeather(searchValue)
     const today = format(new Date(), 'yyyy-MM-dd')
-
-    console.log('a7aaaa', error, isError);
 
     const formateCurrentWeatherData = () => {
         if (weatherData) {
