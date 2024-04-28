@@ -8,9 +8,9 @@ export const useCurrentWeather = (searchValue) => {
 
     const formateCurrentWeatherData = () => {
         if (weatherData) {
-            const { wind_kph, temp_c, humidity, feelslike_c, pressure_mb, condition } = weatherData.current;
+            const { wind_kph, temp_c, humidity, feelslike_c, pressure_mb, condition, last_updated } = weatherData.current;
             const { icon, text } = condition;
-            const { country, name, localtime } = weatherData.location;
+            const { country, name } = weatherData.location;
             const todayForecast = weatherData.forecast.forecastday?.find(day => day.date === today)
             return {
                 windSpeed: wind_kph,
@@ -22,7 +22,7 @@ export const useCurrentWeather = (searchValue) => {
                 description: text,
                 country,
                 city: name,
-                time: format(new Date(localtime), "dd MMMM, yyyy h:mm a"),
+                time: format(new Date(last_updated), "dd MMMM, yyyy h:mm a"),
                 sunriseTime: todayForecast?.astro.sunrise,
                 sunsetTime: todayForecast?.astro.sunset,
             }

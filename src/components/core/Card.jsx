@@ -1,4 +1,4 @@
-export const Card = ({ title, otherOptions, gradientBackgroundDir, fromColor, viaColor, toColor, children }) => {
+export const Card = ({ title, otherOptions, gradientBackgroundDir, children }) => {
     return (
         <div className={`${gradientBackgroundDir} from-[#1c1d1e] via-[#101112] to-transparent py-4 px-6 text-white rounded-2xl`}>
             <div className='flex items-center justify-between'>
